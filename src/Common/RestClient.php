@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * @Mindfav Info:
+ * Die RestClient Klasse wurde so erweitert,
+ * dass sie die Header-Daten der letzten Anfrage speichert,
+ * und diese über die MailerLite Klasse abgefragt werden können.
+ * Somit können auch die Response-Header empfangen und ausgewertet werden,
+ * welche bspw. Informationen über Rate-Limits enthalten.
+ * Github-Repo: https://github.com/sfxon/mailerlite-api-v2-php-sdk
+ **/
+
 namespace MailerLiteApi\Common;
 
 use Http\Client\HttpClient;
@@ -21,6 +31,8 @@ class RestClient {
     public $requestFactory;
 
     public $streamFactory;
+	
+	public $lastResponseHeaders = null;
 
     /**
      * @param  string  $baseUrl
@@ -80,6 +92,14 @@ class RestClient {
     {
         return $this->send('DELETE', $endpointUri);
     }
+	
+	/**
+	 * Return the last responses headers.
+	 * @return array|null
+	 */
+	public function getLastResponseHeaders() {
+		return $this->lastResponseHeaders;
+	}
 
     /**
      * Execute HTTP request
@@ -126,6 +146,8 @@ class RestClient {
         $status = $response->getStatusCode();
 
         $data = (string) $response->getBody();
+		$this->lastResponseHeaders = $response->getHeaders();
+		
         $jsonResponseData = json_decode($data, false);
         $body = $data && $jsonResponseData === null ? $data : $jsonResponseData;
 

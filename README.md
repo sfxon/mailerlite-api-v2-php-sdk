@@ -1,3 +1,34 @@
+# Fork and Extension of MailerLite API v2 PHP SDK
+
+Extends the original MailerLite PHP SDK.
+
+Fetches and temporarily saves the response headers for a request. Result headers can now be fetched with a call to a function.
+
+Example:
+
+```php
+
+$mailerliteClient = new \MailerLiteApi\MailerLite('your-api-key');
+$subscribersApi = $mailerliteClient->subscribers();
+
+$subscriber = [
+	'email' => 'johndoe@example.com',
+	'name' => 'John',
+	'fields' => [
+		'surname' => 'John',
+		'company' => 'Mindfav Software'
+	]
+];
+
+$addedSubscriber = $subscribersApi->create($subscriber); // returns added subscriber
+
+$lastResponseHeaders = $mailerliteClient->getLastResponseHeaders(); // returns last requests' headers
+```
+
+After this line, you find the original documentation of the MailerLite API v2 PHP SDK:
+
+---
+
 # MailerLite API v2 PHP SDK
 
 It is an official PHP SDK for MailerLite API v2.

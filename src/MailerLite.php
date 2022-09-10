@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * @Mindfav Info:
+ * Die Mailerlite Klasse wurde so erweitert,
+ * dass der Client die Header-Daten der letzten Anfrage speichert,
+ * und diese über die MailerLite Klasse abgefragt werden können.
+ * Somit können auch die Response-Header empfangen und ausgewertet werden,
+ * welche bspw. Informationen über Rate-Limits enthalten.
+ * Github-Repo: https://github.com/sfxon/mailerlite-api-v2-php-sdk
+ **/
+
 namespace MailerLiteApi;
 
 use Http\Client\HttpClient;
@@ -123,5 +133,13 @@ class MailerLite {
     {
         return ApiConstants::BASE_URL . $version . '/';
     }
+	
+	/**
+	 * Return the last responses headers.
+	 * @return array|null
+	 */
+	public function getLastResponseHeaders() {
+		return $this->restClient->getLastResponseHeaders();
+	}
 
 }
